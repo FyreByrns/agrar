@@ -389,7 +389,10 @@ public struct _StringCore {
   ///   the existing buffer's storage.
   mutating func _claimCapacity(
     _ newSize: Int, minElementWidth: Int) -> (Int, UnsafeMutableRawPointer?) {
-    if _fastPath((nativeBuffer != nil) && elementWidth >= minElementWidth) {
+    if _fastPath(
+      (nativeBuffer != nil) && elementWidth >= minElementWidth
+      && isKnownUniquelyReferenced(&_owner)
+    ) {
       var buffer = nativeBuffer!
 
       // In order to grow the substring in place, this _StringCore should point
